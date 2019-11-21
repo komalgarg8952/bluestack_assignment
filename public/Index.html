@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<title>BlueStacks</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular.min.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.12/angular-material.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-animate.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-aria.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-messages.min.js"></script>
+
+<!-- Angular Material Library -->
+<script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.12/angular-material.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker3.standalone.min.css"
+/>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
+
+
+<script src="./index.js"></script>
+<link rel="stylesheet" type="text/css" href="./index.css">
+
+<body ng-app="manageCampaigns"  ng-controller="campaignsController" ng-cloak>
+    <div class="MainHeader">
+        <p style="color: white; margin:0px 0px 0px 10px;font-size: 17px;">Blue Stacks</p>
+        <p style="color: #88e188!important; margin:-5px 0px 0px 10px;font-size: 13px;">{{campaginsString.playBigger}}</p>
+    </div>
+
+
+    <div class="container">
+        <div>
+            <div >
+                <button class="langChange" ng-click="onChangeLanguage()">{{campaginsString.changeLanguage}}</button>
+                <h1 class="docHeading">{{campaginsString.heading}}</h1>
+                <div style="display:grid;" class="bodyFont">
+                <div class="customiseMainTab">
+                    <div class="customiseTab col-md-3" ng-class="{true:'activeButton'}[activeBtn == $index]" ng-repeat="camp in campaginsString.tabArray"
+                        ng-click="onClickCampaigns(camp.id,$index)">
+                        {{camp.value}}
+                    </div>
+                </div>
+            <div class="mobileScroll">
+                <table class="table customiseTableView">
+                    <thead>
+                        <tr style="border: 1px 0px 2px 0px">
+                            <th class="customiseHeader" ng-repeat="header in campaginsString.tableHeader">{{header.title}}</th>
+                        </tr>
+                    </thead>
+                    <tbody style="border: 1px solid #ddd; box-shadow: 1px 2px 2px 0px" ng-if="upcomingTab">
+                        <tr ng-repeat="jsonData in campaginsString.jsondata" ng-if="jsonData.createdOn > todayDate">
+
+                            <div>
+
+                                <td class="col-sm-2 centerTxt">{{jsonData.createdOn | date }}</br>
+                                    <div>{{jsonData.timeDiff}} Days Ahead</div>
+                                </td>
+                                <td class="col-sm-2 centerTxt">
+                                    <img class="customiseImage" src="{{jsonData.image_url}}">{{jsonData.name}}</td>
+                                <td class="col-sm-2 centerTxt">
+
+                                    <img class="customiseImage" ng-click="openModalOfCSV(jsonData)" src="Resources/Page 1/Dashboard/Row Copy 2-Row/Group 4/Price.png">{{jsonData.price}}
+                                </td>
+                                <td class="col-sm-2 centerTxt">
+                                    <img class="customiseImage" src="Resources/Page 1/Dashboard/Row Copy 2-Row/Group 3/file.png">{{jsonData.csv}}</td>
+                                <td class="col-sm-2 centerTxt">
+                                    <img class="customiseImage" src="Resources/Page 1/Dashboard/Row Copy 2-Row/Group 2/statistics-report.png">{{jsonData.report}}
+                                </td>
+
+
+                                <!-- <td><img src ="Resources/Page 1/Dashboard/Row Copy 2-Row/Group 2/statistics-report.png">{{jsonData.report}}</td> -->
+                                <td class="col-sm-2 centerTxt">
+                                    <md-datepicker ng-model="selectedDate" ng-change="dataChanged(selectedDate,$index)">
+
+                                    </md-datepicker>{{jsonData.schedule}}
+                                </td>
+                            </div>
+                        </tr>
+                    </tbody>
+                    <tbody ng-if="liveCamp">
+                        <tr ng-repeat="jsonData in campaginsString.jsondata" ng-if="jsonData.createdOn === todayDate">
+
+                            <!-- <div ng-if === "(jsonData.createdOn | date)>"></div> -->
+                            <td class="col-sm-2 centerTxt">{{jsonData.createdOn | date }}</br>
+                                <div>{{jsonData.timeDiff}} Days Ago</div>
+                            </td>
+                            <td class="col-sm-2 centerTxt">
+                                <img class="customiseImage" src="{{jsonData.image_url}}">{{jsonData.name}}</td>
+                            <td class="col-sm-2 centerTxt">
+
+                                <img class="customiseImage" ng-click="openModalOfCSV(jsonData)" src="Resources/Page 1/Dashboard/Row Copy 2-Row/Group 4/Price.png">{{jsonData.price}}
+                            </td>
+                            <td class="col-sm-2 centerTxt">
+                                <img class="customiseImage" src="Resources/Page 1/Dashboard/Row Copy 2-Row/Group 3/file.png">{{jsonData.csv}}</td>
+                            <td class="col-sm-2 centerTxt">
+                                <img class="customiseImage" src="Resources/Page 1/Dashboard/Row Copy 2-Row/Group 2/statistics-report.png">{{jsonData.report}}
+                            </td>
+                            <!-- <td><img src ="Resources/Page 1/Dashboard/Row Copy 2-Row/Group 2/statistics-report.png">{{jsonData.report}}</td> -->
+                            <td class="col-sm-2 centerTxt">
+                                <md-datepicker ng-model="selectedDate" ng-change="dataChanged(selectedDate,$index)">
+
+                                </md-datepicker>{{jsonData.schedule}}
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody ng-if="pastCamp">
+                        <tr ng-repeat="jsonData in campaginsString.jsondata" ng-if="jsonData.createdOn < todayDate">
+
+                            <!-- <div ng-if === "(jsonData.createdOn | date)>"></div> -->
+                            <td class="col-sm-2 centerTxt">{{jsonData.createdOn | date }}</br>
+                                <div>{{jsonData.timeDiff}} Days Ago</div>
+                            </td>
+                            <td class="col-sm-2 centerTxt">
+                                <img class="customiseImage" src="{{jsonData.image_url}}">{{jsonData.name}}</td>
+                            <td class="col-sm-2 centerTxt">
+                                <img class="customiseImage" ng-click="openModalOfCSV(jsonData)" src="Resources/Page 1/Dashboard/Row Copy 2-Row/Group 4/Price.png">{{jsonData.price}}
+                            </td>
+                            <td class="col-sm-2 centerTxt">
+                                <img class="customiseImage" src="Resources/Page 1/Dashboard/Row Copy 2-Row/Group 3/file.png">{{jsonData.csv}}</td>
+                            <td class="col-sm-2 centerTxt">
+                                <img class="customiseImage" src="Resources/Page 1/Dashboard/Row Copy 2-Row/Group 2/statistics-report.png">{{jsonData.report}}
+                            </td>
+                            <!-- <td><img src ="Resources/Page 1/Dashboard/Row Copy 2-Row/Group 2/statistics-report.png">{{jsonData.report}}</td> -->
+                            <td class="col-sm-2 centerTxt">
+                                <md-datepicker ng-model="selectedDate" ng-change="dataChanged(selectedDate,$index)">
+
+                                </md-datepicker>{{jsonData.schedule}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+           
+                <div id="myModal" class="modal">
+
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                        <div id="modelHeader" class="modal-header modelHeader_custom" style="background-color:rgb(122,193,67);color:white;">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeModal()">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <center>
+                                <h4 class="modalheading">{{campaginsString.pricingModal}}</h4>
+                            </center>
+                        </div>
+
+                        <!-- <div ng-include src="csFileUrl"></div> -->
+                        <div class="modal-body" style="background:#fff;overflow-y: auto;
+                        height: 360px;" ng-model="csReportData">
+                            <div class="row mobileView">
+                                <img class="modalImage col-sm-5" src="{{modalImageUrl}}">
+                                <div class="modalCampaignName col-sm-4 col-md-2">{{modalCampaignName}}</br><div>
+                                    {{modalRegion}}
+                                </div></div>
+                             
+                            </div>
+                           <h3 class = "tableHeading">{{campaginsString.pricing}}</h3>
+                            <table class="modalTable">
+                 
+                                <tbody >
+                                    <tr>
+                                        <td class="tableBody" >1{{campaginsString.week}} - 1{{campaginsString.month}}</td>
+                                        <td class="tableData" >$100.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tableBody" >6{{campaginsString.month}}</td>
+                                        <td class="tableData">$550</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tableBody" > 1 {{campaginsString.year}}</td>
+                                        <td class="tableData" >$1000</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div style="width: 100%;text-align: center;">
+                            <button class="btn success" ng-click="closeModal()">{{campaginsString.close}}</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+</body>
+
+</html>
